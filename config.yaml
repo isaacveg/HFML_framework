@@ -1,0 +1,83 @@
+## Runner settings
+CREATE_SUBDIR_PER_RUN: True  # create a subdirectory for each run
+server_file: './server.py'  # server file
+client_file: './client.py'  # client file
+
+## File settings
+config: './config.yaml'  # use config file, will overwrite any other arguments
+data_dir: '../datasets/cifar10_nc30_distiid_blc1'  # dataset directory
+work_dir: './runs/cifar10_nc30_distiid_blc1/'  # working directory
+
+## Training settings
+seed: 2024  # random seed
+batch_size: 32  # batch size
+test_batch_size: 64  # test batch size
+lr: 0.1  # learning rate
+weight_decay: 0.0001  # weight decay
+max_epochs: 500  # epoch
+dropout: 0.5  # dropout rate
+momentum:   # momentum
+local_epochs: 1  # local epochs
+lr_decay: 0.993 # Reduction on learing rate
+
+## Simulated system heterogeneity settings
+USE_SIM_SYSHET: True  # use simulated system heterogeneity
+sys_het_list:             # randomly sample time within normal distribution with mean and variance
+  - computation: 10.0      # Long computation and communication time, low dynamic
+    communication: 10.0
+    dynamics: 2.0
+  - computation: 7.0      # Short computation and communication time, high dynamic
+    communication: 7.0
+    dynamics: 1.0
+  - computation: 5.0      # Medium computation and communication time, medium dynamic
+    communication: 5.0
+    dynamics: 1.5
+  - computation: 1.0      # Long computation and communication time, high dynamic
+    communication: 1.0
+    dynamics: 0.5
+
+## Federated learning settings
+num_clients: 50  # number of clients, equals to number of training clients + number of evaluation clients
+num_training_clients: 10  # number of training clients
+## Local Optimization Settings
+# USE_EVAL_CLIENTS: True  # use evaluation clients
+num_eval_clients: 10  # number of evaluation clients
+
+## Meta Learning Settings
+# FedMeta
+alpha: 0.2  # meta inner learning rate
+beta: 0.1   # meta outer learning rate
+optim_steps: 1  # left none for full dataset finetune
+eval_optim_steps: 10   # None for full dataset finetune
+## Adaptive adjustment
+min_steps: 3  # minimum inner steps
+max_steps: 6  # maximum inner steps
+min_tau: 6   # minimum tau preventing non-positive SGDs
+mid_tau: 30
+max_tau: 90  # maximum tau preventing non-positive SGDs
+## Temperature with V
+psi: 0.5  # temperature for V
+# weight_by: 'upd'  # avg, sample, V
+# trial: 'one'   # all, two, one
+## allow higher max_tau
+
+# Ablation
+# USE_ABLATION: False  # use ablation
+ABLATION_V: False  # ablation V
+ABL_ONE: False  # ablation one
+# if ablv, the clients will use the same self.ablation_steps, and the tau will be set to self.mid_tau
+# if ablone, the clients will use different steps, and the tau will be set to self.mid_tau
+ablation_steps: 10  # steps when ablation, fixed over clients.
+
+
+## custom settings
+method: fedmetaw\info  # For distiguish federated learning method
+model_type: alexnet  # model type
+dataset_type: cifar10  # dataset_type
+
+## Logging settings
+USE_TENSORBOARD: True
+log_path:      # log directory, set blank to use default
+verb: 1  # verbose, True or False
+
+
